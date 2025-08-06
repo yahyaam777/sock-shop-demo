@@ -28,3 +28,15 @@ jobs:
     - name: Deploy Kubernetes Resources
       run: |
         kubectl apply -n sock-shop -f deploy/kubernetes/
+
+
+
+        - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build and Push frontend Docker image
+      run: |
+        docker build -t ${{ steps.login-ecr.outputs.registry }}/sock-shop/frontend:latest ./path-to-frontend/
+        docker push ${{ steps.login-ecr.outputs.registry }}/sock-shop/frontend:latest
+    
